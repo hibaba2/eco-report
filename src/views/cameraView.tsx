@@ -17,7 +17,6 @@ const ReportForm = () => {
 
   const handleDateChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(false);
     setDate(currentDate);
   };
 
@@ -58,87 +57,142 @@ const ReportForm = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre del reporte"
-        value={reportName}
-        onChangeText={setReportName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Descripción"
-        value={description}
-        onChangeText={setDescription}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Dirección"
-        value={address}
-        onChangeText={setAddress}
-      />
+      <View style={styles.inputGroup}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre del reporte"
+          value={reportName}
+          onChangeText={setReportName}
+        />
+      </View>
 
-      <Button title="Seleccionar Fecha" onPress={() => setShowDatePicker(true)} />
+      <View style={styles.inputGroup}>
+        <TextInput
+          style={styles.input}
+          placeholder="Descripción"
+          value={description}
+          onChangeText={setDescription}
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <TextInput
+          style={styles.input}
+          placeholder="Dirección"
+          value={address}
+          onChangeText={setAddress}
+        />
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => setShowDatePicker(true)}>
+        <Text style={styles.buttonText}>{date.toLocaleDateString()}</Text>
+      </TouchableOpacity>
       {showDatePicker && (
-        <DateTimePicker value={date} mode="date" display="default" onChange={handleDateChange} />
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+          style={styles.datePicker}
+        />
       )}
 
       <View style={styles.switchContainer}>
-        <Text>Limpio:</Text>
-        <Switch value={cleaned} onValueChange={setCleaned} />
+        <Text style={styles.label}>Limpio:</Text>
+        <Switch
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={cleaned ? '#f5dd4b' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={setCleaned}
+          value={cleaned}
+        />
       </View>
 
-      <Button title="Adjuntar Imagen" onPress={pickImage} />
+      <TouchableOpacity style={styles.button} onPress={pickImage}>
+        <Text style={styles.buttonText}>Adjuntar Imagen</Text>
+      </TouchableOpacity>
       {image && (
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={styles.image} />
+        <View style={styles.imagePreviewContainer}>
+          <Image source={{ uri: image }} style={styles.imagePreview} />
           <TouchableOpacity style={styles.deleteButton} onPress={removeImage}>
             <Text style={styles.deleteButtonText}>X</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      <Button title="Enviar" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Enviar</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  inputGroup: {
+    width: '100%',
+    marginBottom: 15,
   },
   input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 10,
-    marginBottom: 10,
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 15,
+    width: '100%',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  datePicker: {
+    width: '100%',
+    marginBottom: 15,
   },
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
+    width: '100%',
+    justifyContent: 'space-between',
   },
-  imageContainer: {
-    position: 'relative',
-    marginBottom: 10,
+  label: {
+    fontSize: 16,
   },
-  image: {
-    width: 100,
-    height: 100,
+  imagePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  imagePreview: {
+    width: 200,
+    height: 200,
+    marginBottom: 10,
   },
   deleteButton: {
     position: 'absolute',
-    right: 0,
-    top: 0,
-    backgroundColor: 'red',
+    top: -10,
+    right: -10,
+    backgroundColor: '#ff3b30',
     borderRadius: 15,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 5,
   },
   deleteButtonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 
