@@ -7,8 +7,8 @@ export const AuthView = () => {
     return (
         <View style={styles.container}>
             <StatusBar />
-            {/* <LoginComponent /> */}
-            <SignInComponents />
+            {/* <LoginComponent  SignInComponent /> */}
+            <LoginComponent />
         </View>
     )
 }

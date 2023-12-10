@@ -2,19 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
 
-export default function HomeView({ navigation }) {
+export default function HomeView() {
 
   return (
     <View style={styles.container}>
-      <Text>Soy Home</Text>
-      <Button
-        onPress={() => navigation.navigate('Address')}
-        title="Go to Address"
-      />
-      <StatusBar style="auto" />
+      <Text>Home!</Text>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
