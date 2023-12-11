@@ -4,6 +4,22 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
 import { createReport } from '../Firebase/database';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+const uploadImage = async (uri:any) => {
+  if (!uri) return null;
+
+  const storage = getStorage();
+  const filename = uri.substring(uri.lastIndexOf('/') + 1);
+  const storageRef = ref(storage, `images/${filename}`);
+
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  await uploadBytes(storageRef, blob);
+  return await getDownloadURL(storageRef);
+};
+
 
 
 
@@ -15,7 +31,41 @@ const ReportFormView = () => {
   const [cleaned, setCleaned] = useState(false);
   const [image, setImage] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const imageUrl = await uploadImage(image);
+  
+      const reportData = {
+        reportName,
+        description,
+        address,
+        date: date.toISOString(),
+        cleaned,
+        imageUrl,
+      };
+  
+      if (imageUrl != null) {
+        await createReport(reportName, imageUrl, description, address, date, cleaned);
+
+      }
+      alert('Reporte enviado con éxito');
+  
+      // Limpiar formulario
+      setReportName('');
+      setDescription('');
+      setAddress('');
+      setDate(new Date());
+      setCleaned(false);
+      setImage('');
+    } catch (error) {
+      alert('Error al enviar el reporte: ');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleImagePick = async (type:any) => {
     let result;
@@ -55,24 +105,6 @@ const ReportFormView = () => {
     setImage('');
   };
 
-  const handleSubmit = async () => {
-    const reportData = {
-      reportName,
-      description,
-      address,
-      date: date.toISOString(),
-      cleaned,
-      imageUrl: image,
-    };
-
-    try {
-      await createReport(reportName, image, description,address, date, cleaned);
-      //await db.collection('reports').add(reportData);
-      alert('Reporte enviado con éxito');
-    } catch (error) {
-      alert('Error al enviar el reporte: ');
-    }
-  };
 
   return (
     <View style={styles.container}>

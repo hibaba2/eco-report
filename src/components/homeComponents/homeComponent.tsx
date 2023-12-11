@@ -6,6 +6,8 @@ import { getReports } from '../../Firebase/database';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+
 
 
 const numColumns = 2;
@@ -80,8 +82,18 @@ const HomeScreen = () => {
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <View style={styles.shimmerContainer}>
+        {Array.from({ length: 6 }, (_, index) => (
+          <ShimmerPlaceholder 
+            key={index} 
+            style={styles.shimmerPlaceholder} 
+          />
+        ))}
+      </View>
+    );
   }
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -126,6 +138,19 @@ const styles = StyleSheet.create({
       padding: 5, // Espaciado alrededor del texto
       fontSize: 16, // Tamaño de fuente aumentado para mejor legibilidad
     },
+    shimmerContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        padding: 20,
+      },
+      shimmerPlaceholder: {
+        width: screenWidth / numColumns - 20,
+        height: screenWidth / numColumns - 20,
+        borderRadius: 10,
+        margin: 10,
+        backgroundColor: '#ececec', // Color de fondo para el placeholder
+      },
   });
 
 export default HomeScreen;

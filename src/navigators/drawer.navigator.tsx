@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeView from '../views/homeView';
 import AddressView from '../views/addressView';
+import HomeStackNavigator from './stackhome';
 
 
 export default function DrawerNavigator() {
@@ -8,10 +9,10 @@ export default function DrawerNavigator() {
 
     return (
         <Drawer.Navigator>
-          <Drawer.Screen name="Home" component={HomeView} />
+          <Drawer.Screen name="Home" component={HomeStackNavigator} />
           <Drawer.Screen name="Address" component={AddressView} />
         </Drawer.Navigator>
     
       );
-}
+} 
   

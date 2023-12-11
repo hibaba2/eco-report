@@ -4,9 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
 import { createReport } from '../../Firebase/database';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import StackNavigator from '../../navigators/stack.navigator';
 import { useNavigation } from '@react-navigation/core';
+
 
 
 
@@ -85,12 +86,13 @@ const ReportForm = () => {
   const uploadImage = async (uri:any) => {
     const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const storageRef = ref(storage, `images/${filename}`);
+    const ref = storageRef(storage, `images/${filename}`);
+  
     const response = await fetch(uri);
     const blob = await response.blob();
-
-    const snapshot = await uploadBytes(storageRef, blob);
-    const downloadURL = await getDownloadURL(snapshot.ref);
+  
+    await uploadBytes(ref, blob);
+    const downloadURL = await getDownloadURL(ref);
     return downloadURL;
   };
 

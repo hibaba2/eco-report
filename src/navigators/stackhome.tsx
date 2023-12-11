@@ -11,7 +11,7 @@ const Stack = createStackNavigator<StackParamList>();
 const HomeStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Grilla de Datos" component={HomeScreen} />
       <Stack.Screen name="DetailComponent" component={DetailComponent} />
     </Stack.Navigator>
   );
