@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "claseUno",
-    "slug": "claseUno",
+    "name": "Eco Report",
+    "slug": "eco report",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/logo.png",
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icons/logo.png",
+        "backgroundColor": "#2a4016"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/logo.png"
     }
   }
 }
