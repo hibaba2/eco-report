@@ -6,6 +6,7 @@ import HomeView from '../views/homeView';
 import ReportFormView from '../views/reportView';
 import ProfileView from '../views/profileView';
 import { Ionicons } from '@expo/vector-icons';
+import HomeStackNavigator from './stackhome';
 
 
 
@@ -41,7 +42,9 @@ export default function MyTabs() {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Home" component={HomeView} />
+        
+        <Tab.Screen name="Home" component={HomeStackNavigator} />
+
         <Tab.Screen name="Report" component={ReportFormView} />
         <Tab.Screen name="Profile" component={ProfileView} />
     </Tab.Navigator>
