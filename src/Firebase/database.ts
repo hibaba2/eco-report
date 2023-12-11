@@ -19,7 +19,7 @@ const readUserData = () => {
 
 const db = getFirestore(FIREBASE_APP);
 
-const createReport = async (name: string, photo: string, description: string, date: Date) => {
+const createReport = async (name: string, photo: string, description: string,location: string, date: Date,checked: boolean) => {
   try {
     const docRef = await addDoc(collection(db, "reports"), {
       name,

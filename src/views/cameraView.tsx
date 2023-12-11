@@ -3,6 +3,7 @@ import { View, TextInput, Switch, Button, Text, Image, TouchableOpacity, StyleSh
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
+import { createReport } from '../Firebase/database';
 
 
 
@@ -48,6 +49,7 @@ const ReportForm = () => {
     };
 
     try {
+      await createReport(reportName, image, description,address, date, cleaned);
       //await db.collection('reports').add(reportData);
       alert('Reporte enviado con éxito');
     } catch (error) {

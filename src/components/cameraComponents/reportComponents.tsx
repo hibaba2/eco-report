@@ -3,6 +3,7 @@ import { View, TextInput, Switch, Button, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
+import { createReport } from '../../Firebase/database';
 
 
 const ReportForm = () => {
@@ -35,18 +36,21 @@ const ReportForm = () => {
 
   const handleSubmit = async () => {
     // Lógica para enviar datos a Firebase
-    const reportData = {
-      reportName,
-      description,
-      address,
-      date: date.toString(),
-      cleaned,
-      imageUrl: image,
-    };
+    // const reportData = {
+    //   reportName,
+    //   description,
+    //   address,
+    //   date: date.toString(),
+    //   cleaned,
+    //   imageUrl: image,
+    // };
+
+
 
     try {
+        await createReport(reportName, image, description,address, date, cleaned);
       //await db.collection('reports').add(reportData);
-      alert('Reporte enviado con éxito');
+      //alert('Reporte enviado con éxito');
     } catch (error) {
       alert('Error al enviar el reporte');
     }
