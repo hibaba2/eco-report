@@ -4,6 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
 import { createReport } from '../../Firebase/database';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import StackNavigator from '../../navigators/stack.navigator';
+import { useNavigation } from '@react-navigation/core';
+
 
 
 const ReportForm = () => {
@@ -21,6 +25,7 @@ const ReportForm = () => {
     setDate(currentDate);
   };
 
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -34,25 +39,30 @@ const ReportForm = () => {
     }
   };
 
+  const uploadImage = async (uri:any) => {
+    const storage = getStorage();
+    const filename = uri.substring(uri.lastIndexOf('/') + 1);
+    const storageRef = ref(storage, `images/${filename}`);
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const snapshot = await uploadBytes(storageRef, blob);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
+  };
+
   const handleSubmit = async () => {
-    // Lógica para enviar datos a Firebase
-    // const reportData = {
-    //   reportName,
-    //   description,
-    //   address,
-    //   date: date.toString(),
-    //   cleaned,
-    //   imageUrl: image,
-    // };
-
-
-
     try {
-        await createReport(reportName, image, description,address, date, cleaned);
-      //await db.collection('reports').add(reportData);
-      //alert('Reporte enviado con éxito');
+      let imageUrl = '';
+
+      if (image) {
+        imageUrl = await uploadImage(image);
+      }
+
+      await createReport(reportName, imageUrl, description, address, date, cleaned);
+      alert('Reporte enviado con éxito');
     } catch (error) {
-      alert('Error al enviar el reporte');
+      alert('Error al enviar el reporte: ');
     }
   };
 
