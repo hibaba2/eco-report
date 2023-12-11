@@ -20,9 +20,52 @@ const ReportForm = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
-    setDate(currentDate);
+    const isDateSelected = event.type === 'set'; // Verificar si se seleccionó una fecha
+
+    setShowDatePicker(false); // Ocultar el DatePicker en cualquier caso
+  
+    if (isDateSelected) {
+      setDate(selectedDate || date); // Actualizar la fecha solo si se seleccionó una
+    }
+  };
+
+  const pickImageFromGallery = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Se requieren permisos para acceder a la galería.");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const takePhoto = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Se requieren permisos para acceder a la cámara.");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
 
@@ -78,7 +121,8 @@ const ReportForm = () => {
       <Button title="Seleccionar Fecha" onPress={() => setShowDatePicker(true)} />
 
       <Switch value={cleaned} onValueChange={setCleaned} />
-      <Button title="Adjuntar Imagen" onPress={pickImage} />
+      <Button title="Seleccionar de la Galería" onPress={pickImageFromGallery} />
+      <Button title="Tomar Foto" onPress={takePhoto} />
       {image && <Text>Imagen seleccionada</Text>}
 
       <Button title="Enviar" onPress={handleSubmit} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Switch, Button, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, Switch, Button, Text, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
@@ -16,21 +16,38 @@ const ReportFormView = () => {
   const [image, setImage] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDateChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
+  const handleImagePick = async (type:any) => {
+    let result;
+    if (type === 'camera') {
+      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!cameraPermission.granted) return;
+      result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    } else {
+      const galleryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!galleryPermission.granted) return;
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    }
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleDateChange = (event: any, selectedDate: any) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+    if (selectedDate) {
+      setDate(selectedDate);
     }
   };
 
@@ -110,8 +127,11 @@ const ReportFormView = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={pickImage}>
-        <Text style={styles.buttonText}>Adjuntar Imagen</Text>
+      <TouchableOpacity style={styles.button} onPress={() => handleImagePick('gallery')}>
+        <Text style={styles.buttonText}>Seleccionar de Galería</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => handleImagePick('camera')}>
+        <Text style={styles.buttonText}>Tomar Foto</Text>
       </TouchableOpacity>
       {image && (
         <View style={styles.imagePreviewContainer}>
