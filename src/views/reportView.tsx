@@ -6,7 +6,7 @@ import 'firebase/firestore';
 
 
 
-const ReportForm = () => {
+const ReportFormView = () => {
   const [reportName, setReportName] = useState('');
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
@@ -196,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportForm;
+export default ReportFormView;
