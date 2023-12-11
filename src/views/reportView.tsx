@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Switch, Button, Text, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, TextInput, Switch, Button, Text, Image, TouchableOpacity, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'firebase/firestore';
@@ -105,6 +105,14 @@ const ReportFormView = () => {
     setImage('');
   };
 
+  if (isSubmitting) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+  
 
   return (
     <View style={styles.container}>

@@ -84,7 +84,7 @@ const HomeScreen = () => {
   if (loading) {
     return (
       <View style={styles.shimmerContainer}>
-        {Array.from({ length: 6 }, (_, index) => (
+        {Array.from({ length: 2 }, (_, index) => (
           <ShimmerPlaceholder 
             key={index} 
             style={styles.shimmerPlaceholder} 
