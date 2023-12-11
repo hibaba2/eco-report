@@ -25,6 +25,7 @@ const createReport = async (name: string, photo: string, description: string, da
       name,
       photo,
       description,
+      location,
       date,
       checked
     });
